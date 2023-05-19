@@ -1,8 +1,9 @@
 const Book = (props) => {
     let bookStyle = {
         border: "1px solid lightgrey",
-        width: "35%",
-        padding: "15px"
+        minWidth: "35%",
+        maxWidth: "50%",
+        padding: "15px",
     }
     return (
         <article style={bookStyle}>
