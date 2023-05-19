@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Book from "./Book";
 import Shelf from "./Shelf"
+import NewShelfForm from "./NewShelfForm";
 
 const Library = () => {
 
@@ -10,9 +11,9 @@ const Library = () => {
         alignItems: "center",
         width: "100%",
         height: "100%",
-    }
-
-    const [shelves, setShelves] = useState([
+      }
+      
+      const [shelves, setShelves] = useState([
         {
           genre: 'Fiction',
           books: [
@@ -50,11 +51,31 @@ const Library = () => {
           ],
         },
       ])
+      //This state is used to assign an array of shelves a boolean value. This boolean value will track which shelf is currently being opened.
+      const [expandedShelves, setExpandedShelves] = useState(shelves.map(() => false))
+
+      const toggleShelf = (index) => {
+        setExpandedShelves(expandedShelves.map((expanded, i) => (i === index ? !expanded : expanded)));
+      }
+
+      const addShelf = (newShelf) => {
+        setShelves([...shelves, newShelf]);
+        setExpandedShelves([...expandedShelves, false]);
+      }
 
     return (
         <section style={libraryStyle}>
+          <NewShelfForm addShelf={addShelf} />
         {
-        shelves.map(shelf => <Shelf genre={shelf.genre} books={shelf.books} />)
+          shelves.map((shelf, index) => (
+            <div key={index}>
+              <h1 onClick={() => toggleShelf(index)}>
+                {shelf.genre}
+                <span>{expandedShelves[index] ? '▼' : '►'} </span>
+              </h1>
+              {expandedShelves[index] && <Shelf genre={shelf.genre} books={shelf.books} />}
+            </div>
+          ))
         }
         </section>
     )
